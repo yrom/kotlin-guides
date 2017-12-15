@@ -6,19 +6,21 @@ is_site_nav_category: true
 site_nav_category: style
 ---
 
-This document serves as the complete definition of Google's Android coding standards for source code in the Kotlin Programming Language. A Kotlin source file is described as being in Google Android Style if and only if it adheres to the rules herein.
+本文承载了 Google 对于 Android 上的 Kotlin 编程语言的编码准则的完整定义。一份 Kotlin 源文件，当且仅当它遵守本文的规则，可被描述为符合 Google Android Style。
 
-Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of conventions or coding standards as well. However, this document focuses primarily on the hard-and-fast rules that we follow universally, and avoids giving advice that isn't clearly enforceable (whether by human or tool).
+像别的编程语言格式指南一样，所涉及的不仅仅是格式上的美化问题，还包括其它类型的约定或者编码标准。然而，本文主要关注的还是我们普遍遵循的硬性规定，并尽量避免给出不明确的强制性建议（无论是人或者工具）。
 
-_<a href="changelog.html">Last update: {{ site.changes.last.date | date: "%Y-%m-%d" }}</a>_
+_<a href="changelog.html">上次更新于: {{ site.changes.last.date | date: "%Y-%m-%d" }}</a>_
 
-# Source files
+# 源文件
 
-All source files must be encoded as UTF-8.
+所有源文件必须用 UTF-8 编码。
 
-## Naming
+## 命名
 
-If a source file contains only a single top-level class, the file name should reflect the case-sensitive name plus the `.kt` extension. Otherwise, if a source file contains multiple top-level declarations, choose a name that describes the contents of the file, apply PascalCase, and append the `.kt` extension.
+如果一个源文件只包含一个顶级类，这个文件名必须反应出类名且区分大小写的名称，并加上 `.kt` 扩展名。
+
+如果包含多个顶级声明，请选择一个能够描述文件内容的名称，并用[PascalCase](https://en.wikipedia.org/wiki/PascalCase)格式(注：首字母大写，每个单词首字母大写，其余小写)表示，加上 `.kt` 扩展名。
 
 ```kotlin
 // Foo.kt
@@ -33,46 +35,46 @@ fun <T, O> Set<T>.map(func: (T) -> O): List<O> = // …
 fun <T, O> List<T>.map(func: (T) -> O): List<O> = // …
 ```
 
-## Special Characters
+## 特殊字符
 
-### Whitespace characters
+### 空白字符
 
-Aside from the line terminator sequence, the **ASCII horizontal space character (0x20)** is the only whitespace character that appears anywhere in a source file. This implies that:
+除了行终止符外，**ASCII 水平空格字符 (0x20)** 是唯一允许出现在源文件的空白字符。这意为着：
 
- 1. All other whitespace characters in string and character literals are escaped.
- 2. Tab characters are **not** used for indentation.
+ 1. 字符串和字符字面量中所有其它空白字符都会被转义；
+ 2. **不要**用制表符(TAB)来缩进。
 
-### Special escape sequences
+### 特殊转义字符
 
-For any character that has a [special escape sequence](https://kotlinlang.org/docs/reference/basic-types.html#characters) (`\b`, `\n`, `\r`, `\t`, `\'`, `\"`, `\\`, and `\$`), that sequence is used rather than the corresponding Unicode (e.g., `\u000a`) escape.
+[特殊转义序列](https://kotlinlang.org/docs/reference/basic-types.html#characters) (`\b`, `\n`, `\r`, `\t`, `\'`, `\"`, `\\`, 和 `\$`) 中的字符可以直接用，而不需要用相应的 Unicode (如`\u000a`) 来转义
 
-### Non-ASCII characters
+### 非 ASCII 字符
 
-For the remaining non-ASCII characters, either the actual Unicode character (e.g., `∞`) or the equivalent Unicode escape (e.g., `\u221e`) is used. The choice depends only on which makes the code **easier to read and understand**. Unicode escapes are discouraged for printable characters at any location and are strongly discouraged outside of string literals and comments.
+对于非 ASCII 字符，用实际的 Unicode 字符（如`∞`）或者相同意义的 Unicode 转义 （如`\u221e`）都可以。根据**较容易被阅读和理解**的原则来选择其中一种。Unicode 转义不建议用于可打印字符，并且强烈反对在字符串字面量和注释之外使用。
 
-| **Example**                        | **Discussion**                                                           |
-|------------------------------------|--------------------------------------------------------------------------|
-| `val unitAbbrev = "μs"`            | Best: perfectly clear even without a comment.                            |
-| `val unitAbbrev = "\u03bcs" // μs` | Poor: there's no reason to use an escape with a printable character.     |
-| `val unitAbbrev = "\u03bcs"`       | Poor: the reader has no idea what this is.                               |
-| `return "\ufeff" + content`        | Good: use escapes for non-printable characters, and comment if necessary.|
+| **示例**                           | **说明**                                        |
+|------------------------------------|------------------------------------------------|
+| `val unitAbbrev = "μs"`            | 完美: 即便没有注释也一目了然                       |
+| `val unitAbbrev = "\u03bcs" // μs` | 凑合: 可打印字符没有道理要用 Unicode 转义表示       |
+| `val unitAbbrev = "\u03bcs"`       | 不好: 读者完全看不懂这是个啥                       |
+| `return "\ufeff" + content`        | 还行: 转义不可打印字符，并且要加上必要注释           |
 
 
-## Structure
+## 结构
 
-A `.kt` file comprises the following, in order:
+一个 `.kt` 文件依次由下列内容组成:
 
-1. Copyright and/or license header (optional)
-2. File-level annotations
-3. Package statement
-4. Import statements
-5. Top-level declarations
+1. Copyright / License 头 (可选)
+2. 文件级注解
+3. 包定义语句
+4. Import 语句
+5. 顶级声明（Top-level）
 
-Exactly one blank line separates each of these sections.
+上述内容均用空行分隔。
 
 ### Copyright / License
 
-If a copyright or license header belongs in the file it should be placed at the immediate top in a multi-line comment.
+如果有版权 `copyright` 或者授权 `license` 声明，必须放在顶部开始位置，用多行注释表示
 
 ```kotlin
 /*
@@ -82,7 +84,7 @@ If a copyright or license header belongs in the file it should be placed at the 
  */
  ```
 
-Do not use a [KDoc-style](https://kotlinlang.org/docs/reference/kotlin-doc.html) or single-line-style comment.
+不要用 [KDoc 样式](https://kotlinlang.org/docs/reference/kotlin-doc.html) 或者单行注释.
 
 ```kotlin
 /**
@@ -97,44 +99,45 @@ Do not use a [KDoc-style](https://kotlinlang.org/docs/reference/kotlin-doc.html)
 // ...
 ```
 
-### File-level annotations
+### 文件等级注解
 
-Annotations with the 'file' [use-site target](https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets) are placed between any header comment and the package declaration.
+[使用目标点](https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets)为 'file' 的注解需要放到头部注释和包声明之间。
 
-### Package statement
+### 包声明语句
 
-The package statement is not subject to any column limit and is never line-wrapped.
+包声明不被行字数限制且不允许换行。
 
-### Import statements
+### Import 语句
 
-Import statements for classes, functions, and properties are grouped together in a single list and ASCII sorted.
+导入（import）类、函数和属性的语句，按类型分组并按 ASCII 码表序分别排列在一起。
 
-Wildcard imports (of any type) are **not allowed**.
+**不允许**使用通配符(*)。
 
-Similar to the package statement, import statements are not subject to a column limit and they are never line-wrapped.
+跟包声明一样不受行字数限制，不换行。
 
-### Top-level declarations
+### 顶级声明
 
-A `.kt` file can declare one or more types, functions, properties, or type aliases at the top-level.
+一个 `.kt` 文件可以在顶级声明一个或者多个类型、函数、属性以及类型别名。
 
-The contents of a file should be focused on a single theme. Examples of this would be a single public type or a set of extension functions performing the same operation on multiple receiver types. Unrelated declarations should be separated into their own files and public declarations within a single file should be minimized.
+文件的内容应该聚焦在一个主题上，比如单个的公开（public）的类，或者一组在多个接收器类型上执行同样的操作的扩展函数。
+不相关的声明要分开到各自的文件里，并应尽量的减少单个文件里的公开（public）声明。
 
-No explicit restriction is placed on the number nor order of the contents of a file.
+对于文件内容的数量和排列顺序没有明确的限制。
 
-Source files are usually read from top-to-bottom meaning that the order, in general, should reflect that the declarations higher up will inform understanding of those farther down. Different files may choose to order their contents differently. Similarly, one file may contain 100 properties, another 10 functions, and yet another a single class.
+阅读源代码通常是从上往下的，这意味着，在一般情况下，顺序上应该能反应出声明越靠上越能让他人对其理解得更为深入。
+不同文件可能会按其内容选择不同的顺序书写。同样的，一个文件可能会包含100个属性，还有10个函数，甚至会有一个类。
 
-What is important is that each class uses **_some_ logical order**, which its maintainer could explain if asked. For example, new functions are not just habitually added to the end of the class, as that would yield "chronological by date added" ordering, which is not a logical ordering.
+重要的是，每个类应该有其**一定逻辑上的顺序**，维护者被问到时是可以解释其合理性的。例如，新增的函数不应只是习惯性的放到文件末尾，因为那样不过是迁就于“按日期时间顺序添加”的顺序，而不是一个合理的顺序。
 
-### Class member ordering
+### 类成员的顺序
 
-The order of members within a class follow the same rules as the top-level declarations.
+类成员顺序跟顶级声明遵循同样的规则。
 
+# 格式
 
-# Formatting
+## 大括号({})
 
-## Braces
-
-Braces are not required for `when` branches and `if` statement bodies which have no `else if`/`else` branches and which fit on a single line.
+`when` 的分支语句，以及 `if` 的语句没有 `else if`/`else` 分支且单行表示的，可以省略大括号。
 
 ```kotlin
 if (string.isEmpty()) return
@@ -145,7 +148,7 @@ when (value) {
 }
 ```
 
-Braces are otherwise required for any `if`, `for`, `when` branch, `do`, and `while` statements, even when the body is empty or contains only a single statement.
+任何 `if`、 `for`、 `when`的分支、`do` 以及 `while` 的语句，即使它们后面内容是空的或只有一行，都必须用大括号。
 
 ```kotlin
 if (string.isEmpty())
@@ -156,14 +159,14 @@ if (string.isEmpty()) {
 }
 ```
 
-### Non-empty blocks
+### 非空代码块（block）
 
-Braces follow the Kernighan and Ritchie style ("Egyptian brackets") for nonempty blocks and block-like constructs:
+非空代码块的大括号遵循 [Kernighan & Ritchie](https://en.wikipedia.org/wiki/K%26R) 风格 ("埃及括号 [Egyptian brackets](https://blog.codinghorror.com/content/images/uploads/2012/07/6a0120a85dcdae970b016768a17a2a970b-800wi.jpg)")：
 
-* No line break before the opening brace.
-* Line break after the opening brace.
-* Line break before the closing brace.
-* Line break after the closing brace, _only if_ that brace terminates a statement or terminates the body of a function, constructor, or _named_ class. For example, there is _no_ line break after the brace if it is followed by `else` or a comma.
+* 左大括号前不换行
+* 左大括号后换行
+* 右大括号前换行
+* 右大括号后换行，_仅_ 适用于以括号结束的语句或者函数、构造器、和类的结束。例如，大括号后跟着 `else` 或者逗号是不需要换行的。
 
 ```kotlin
 return Runnable {
@@ -189,27 +192,27 @@ return object : MyClass() {
 }
 ```
 
-A few exceptions for [enum classes](#enum-classes) are given below.
+针对[枚举类](#枚举类)的特别情况在后文有提到。
 
-### Empty blocks
+### 空代码块（block）
 
-An empty block or block-like construct must be in K&R style.
+空代码块需遵循 K&R 风格.
 
 ```kotlin
 try {
     doSomething()
-} catch (e: Exception) {} // WRONG!
+} catch (e: Exception) {} // 错了!
 ```
 ```kotlin
 try {
     doSomething()
 } catch (e: Exception) {
-} // Okay
+} // 可以
 ```
 
-### Expressions
+### 表达式
 
-An `if`/`else` conditional that is used as an expression may omit braces _only_ if the entire expression fits on one line.
+`if`/`else` 条件语句用作表达式时可以在只有一行内容的时候省略大括号。
 
 ```kotlin
 val value = if (string.isEmpty()) 0 else 1  // Okay
@@ -229,51 +232,50 @@ val value = if (string.isEmpty()) { // Okay
 ```
 
 
-## Indentation
+## 缩进
 
-Each time a new block or block-like construct is opened, the indent increases by four spaces. When the block ends, the indent returns to the previous indent level. The indent level applies to both code and comments throughout the block.
+每次书写一个新的代码块或者块状构造时，缩进增加四个空格。代码块结束时，缩进回到前一个层级。
+缩进层级可以应用于整个代码块中的代码和注释。
 
+## 一行一句
 
-## One statement per line
+每个语句都应以换行结尾，无需用分号。
 
-Each statement is followed by a line break. Semicolons are not used.
+## 换行
 
+一行代码限制在100个字符以内。除了以下面列举的几种情况外，任何超过限制的行都必须按下面解释进行换行。
 
-## Line wrapping
+例外：
+* 不可以换行的（如KDoc中的一个很长的URL）
+* package 和 import 的语句
+* 在注释中的命令行（可能被直接粘贴进shell中执行）
 
-Code has a column limit of 100 characters. Except as noted below, any line that would exceed this limit must be line-wrapped, as explained below.
+### 换行位置
 
-Exceptions:
+换行的根本准则是：优先在较高的句法层面（syntactic level）上换行。
 
-* Lines where obeying the column limit is not possible (for example, a long URL in KDoc)
-* `package` and `import` statements
-* Command lines in a comment that may be cut-and-pasted into a shell
+ 1. _非赋值_ 运算符处换行时，在符号前换行。
+    * 这也适用于"类运算符"的符号：
+      * 点分隔符 (`.`)
+      * 两个冒号的成员引用 (`::`)
+ 2. _赋值_ 运算符处换行时，在符号后换行。
+ 3. 在方法或者构造器的左括号 (`(`) 之后换行
+ 4. 在跟在标记的逗号 (`,`) 之后换行
+ 5. 在跟在 lambda 的参数后面的箭头 (`->`) 之后换行
 
-### Where to break
+注意：换行的主要目的是让代码清晰，而不是过分追求更少的代码行数。
 
-The prime directive of line-wrapping is: prefer to break at a **higher syntactic level**. Also:
+### 连续缩进
 
- 1. When a line is broken at a _non-assignment_ operator the break comes _before_ the symbol.
-    * This also applies to the following "operator-like" symbols:
-      * the dot separator (`.`)
-      * the two colons of a member reference (`::`)
- 2. When a line is broken at an _assignment_ operator the break comes _after_ the symbol.
- 3. A method or constructor name stays attached to the open parenthesis (`(`) that follows it.
- 4. A comma (`,`) stays attached to the token that precedes it.
- 5. A lambda arrow (`->`) stays attached to the argument list that precedes it.
+当换行后，每一行（每个连续行），相对原行至少要有 +8 个字符的缩进。
 
-Note: The primary goal for line wrapping is to have clear code, _not necessarily_ code that fits in the smallest number of lines.
+当有多个连续的换行后，缩进可能根据需要会增加到 +8 以上。
+通常来说，当且仅当两个连续的缩进行在语法上为并行的元素开头，使用相同的缩进层级。
 
+### 函数
 
-### Continuation indent
-
-When line-wrapping, each line after the first (each _continuation line_) is indented at least +8 from the original line.
-
-When there are multiple continuation lines, indentation may be varied beyond +8 as desired. In general, two continuation lines use the same indentation level if and only if they begin with syntactically parallel elements.
-
-### Functions
-
-When a function signature does not fit on a single line, break each parameter declaration onto its own line. Parameters defined in this format should use a single indent (+4). The closing parenthesis (`)`) and return type are placed on their own line with no additional indent.
+当函数的签名一行容不下，在每个参数声明处都换行。这种格式下定义的参数应使用一个缩进（+4)。
+闭合括号(`)`) 要和返回类型放在同一行，且不用额外的缩进。
 
 ```kotlin
 fun <T> Iterable<T>.joinToString(
@@ -285,9 +287,9 @@ fun <T> Iterable<T>.joinToString(
 }
 ```
 
-#### Expression functions
+#### 表达式函数
 
-When a function contains only a single expression it can be represented as an [expression function](https://kotlinlang.org/docs/reference/functions.html#single-expression-functions).
+当一个函数只包含了一个表达式语句时，可以将其用[表达式函数](https://kotlinlang.org/docs/reference/functions.html#single-expression-functions)来表示。
 
 ```kotlin
 override fun toString(): String {
@@ -298,18 +300,18 @@ override fun toString(): String {
 override fun toString(): String = "Hey"
 ```
 
-Expression functions should not wrap to two lines. If an expression function grows to require wrapping, use a normal function body, a `return` declaration, and normal expression wrapping rules instead.
+表达式函数不应该被分成两行，如果一个表达式函数过长，需要被分行书写，这时应该用普通的函数体，`return`声明，符合换行规则的普通表达式来替代。
 
-### Properties
+### 属性
 
-When a property initializer does not fit on a single line, break after the equals sign (`=`) and use a continuation indent.
+当一个属性的初始化代码一行放不下时，可以在等号`=`之后换行，并使用连续缩进。
 
 ```kotlin
 private val defaultCharset: Charset? =
         EncodingRegistry.getInstance().getDefaultCharsetForPropertiesFiles(file)
 ```
 
-Properties declaring a `get` and/or `set` function should place each on their own line with a normal indent (+4). Format them using the same rules as functions.
+属性的`set`和`get`函数应该放到它们各自的行，并用一个普通缩进（+4）。它们跟别的普通函数遵循一样的格式。
 
 ```kotlin
 var directory: File? = null
@@ -318,39 +320,32 @@ var directory: File? = null
     }
 ```
 
-Read-only properties can use a shorter syntax which fits on a single line.
+只读属性若在一行内可以用更简短的语法表示。
 
 ```kotlin
 val defaultExtension: String get() = "kt"
 ```
 
+## 空行
 
-## Whitespace
+### 纵向
 
-### Vertical
+空行出现在：
 
-A single blank line appears:
+ 1. 在类的连续成员之间：属性、构造器、函数、嵌套类等等
+     * **例外**: 两个连续的（没有其它代码）属性之间空行不是必须的。空行可以用于将属性按逻辑分组，还有将属性和其幕后属性（如果存在）作关联用。
+     * **例外**: 枚举常量之间的空白行下面有提到。
+2. 在语句之间，按需将代码组织成逻辑上的小节。
+3. _可选项_：在函数的第一个语句之前，在类的第一个成员之前，或者类的最后一个成员之后（不鼓励也不反对）。
+4. 按本文其它章节的要求（如[“结构”](#结构)）
 
- 1. _Between_ consecutive members of a class: properties, constructors, functions, nested classes, etc.
+允许多个连续的空行，但不鼓励也不强求。
 
-     * **Exception**: A blank line between two consecutive properties (having no other code between them) is optional. Such blank lines are used as needed to create logical groupings of properties and associate properties with their backing property, if present.
+### 横向
 
-     * **Exception**: Blank lines between enum constants are covered below.
+除了语言和其它样式规范的要求之外，不包括字面值、注释和KDoc，单个 ASCII 的空格仅可出现在下列位置：
 
- 2. Between statements, as _needed_ to organize the code into logical subsections.
-
- 3. _Optionally_ before the first statement in a function, before the first member of a class, or after the last member of a class (neither encouraged nor discouraged).
-
- 4. As required by other sections of this document (Such as the ["Structure"](#structure) section).
-
-Multiple consecutive blank lines are permitted, but not encouraged or ever required.
-
-### Horizontal
-
-Beyond where required by the language or other style rules, and apart from literals, comments, and KDoc, a single ASCII space also appears in the following places only:
-
- 1. Separating any reserved word, such as `if`, `for`, or `catch` from an open parenthesis (`(`) that follows it on that line.
-
+1. 隔开保留词（如`if`、`for`及`catch`）和跟在其后的开括号（`(`）。
     ```kotlin
     // WRONG!
     for(i in 0..1) {
@@ -361,9 +356,8 @@ Beyond where required by the language or other style rules, and apart from liter
     for (i in 0..1) {
     }
     ```
-
- 2. Separating any reserved word, such as `else` or `catch`, from a closing curly brace (`}`) that precedes it on that line.
-
+    
+2. 隔开保留词（如`else`、`catch`）和跟在其后的右大括号（`}`）。
     ```kotlin
     // WRONG!
     }else {
@@ -374,9 +368,8 @@ Beyond where required by the language or other style rules, and apart from liter
     } else {
     }
     ```
-
- 3. Before any open curly brace (`{`).
-
+    
+3. 在开大括号（`{`）之前。
     ```kotlin
     // WRONG!
     if (list.isEmpty()){
@@ -387,9 +380,8 @@ Beyond where required by the language or other style rules, and apart from liter
     if (list.isEmpty()) {
     }
     ```
-
- 4. On both sides of any binary operator.
-
+    
+4. 在二元运算符两边。
     ```kotlin
     // WRONG!
     val two = 1+1
@@ -398,11 +390,11 @@ Beyond where required by the language or other style rules, and apart from liter
     // Okay
     val two = 1 + 1
     ```
+    
+    这个规则也适应下面的“类运算符”符号：
 
-    This also applies to the following "operator-like" symbols:
-
-     *  the arrow in a lambda expression (`->`).
-
+    * lambda表达式的箭头（`->`）
+    
         ```kotlin
         // WRONG!
         ints.map { value->value.toString() }
@@ -412,9 +404,9 @@ Beyond where required by the language or other style rules, and apart from liter
         ints.map { value -> value.toString() }
         ```
 
-    But not:
+    但不适用于：
 
-     *  the two colons (`::`) of a member reference.
+    * 成员引用的双冒号（`::`）
 
         ```kotlin
         // WRONG!
@@ -425,8 +417,8 @@ Beyond where required by the language or other style rules, and apart from liter
         val toString = Any::toString
         ```
 
-     *  the dot separator (`.`).
-
+    * 点号分隔符（`.`）
+    
         ```kotlin
         // WRONG
         it . toString()
@@ -435,8 +427,7 @@ Beyond where required by the language or other style rules, and apart from liter
         // Okay
         it.toString()
         ```
-
-    *  the range operator (`..`).
+    *  区间运算符 (`..`).
 
         ```kotlin
         // WRONG
@@ -445,9 +436,9 @@ Beyond where required by the language or other style rules, and apart from liter
         ```kotlin
         // Okay
         for (i in 1..4) print(i)
-        ```
 
- 5. Before a colon (`:`) only if used in a class declaration for specifying a base class / interfaces or when used in a `where` clause for [generic constraints](https://kotlinlang.org/docs/reference/generics.html#generic-constraints).
+    
+5. 冒号（`:`）之前，仅限于类声明中指定基类或接口的冒号，或者在[泛型约束](https://kotlinlang.org/docs/reference/generics.html#generic-constraints)的where从句中的冒号。
 
     ```kotlin
     // WRONG!
@@ -474,9 +465,9 @@ Beyond where required by the language or other style rules, and apart from liter
     ```kotlin
     // Okay
     fun <T> max(a: T, b: T) where T : Comparable<T>
-    ```
+     ```
 
- 6. After a comma (`,`) or colon (`:`).
+6. 逗号（`,`）和冒号（`:`）之后。
 
     ```kotlin
     // WRONG!
@@ -495,8 +486,8 @@ Beyond where required by the language or other style rules, and apart from liter
     // Okay
     class Foo : Runnable
     ```
-
- 7. On both sides of the double slash (`//`) that begins an end-of-line comment. Here, multiple spaces are allowed, but not required.
+  
+7. 在行尾注释双斜杠（`//`）的两边。这里允许有多个空格，但不强制
 
     ```kotlin
     // WRONG!
@@ -507,20 +498,19 @@ Beyond where required by the language or other style rules, and apart from liter
     var debugging = false // disabled by default
     ```
 
-This rule is never interpreted as requiring or forbidding additional space at the start or end of a line; it addresses only interior space.
+本规则不负责解释行首/尾所要求或禁止的额外空格，它仅用于行内。
 
+## 特定的结构体
 
-## Specific constructs
+### 枚举类
 
-### Enum classes
-
-An enum with no functions and no documentation on its constants may optionally be formatted as a single line.
+无函数、无文档的枚举类，可以选择用一行书写。
 
 ```kotlin
 enum class Answer { YES, NO, MAYBE }
 ```
 
-When the constants in an enum are placed on separate lines, a blank line is not required between them except in the case where they define a body.
+枚举中的常量若是在不同的行，它们之间不需要空行，但定义了代码主体的除外。
 
 ```kotlin
 enum class Answer {
@@ -533,11 +523,11 @@ enum class Answer {
 }
 ```
 
-Since enum classes are classes, all other rules for formatting classes apply.
+枚举类也属于类，别的对于类的格式要求也同样适用于它。
 
-### Annotations
+### 注解
 
-Member or type annotations are placed on separate lines immediately prior to the annotated construct.
+成员和类的注解，直接在被标注的结构之前分行书写。
 
 ```kotlin
 @Retention(SOURCE)
@@ -545,14 +535,14 @@ Member or type annotations are placed on separate lines immediately prior to the
 annotation class Global
 ```
 
-Annotations without arguments can be placed on a single line.
+多个无参注解可以一并放到一行。
 
 ```kotlin
 @JvmField @Volatile
 var disposable: Disposable? = null
 ```
 
-When only a single annotation without arguments is present it may be placed on the same line as the declaration.
+只有一个无参注解，可以把它和声明放在同一行。
 
 ```kotlin
 @Volatile var disposable: Disposable? = null
@@ -562,34 +552,34 @@ When only a single annotation without arguments is present it may be placed on t
 }
 ```
 
-### Implicit return/property types
+### 隐式返回/属性类型
 
-If an expression function body or a property initializer is a scalar value or the return type can be clearly inferred from the body then it can be omitted.
+若一个表达式函数或者属性的初始化代码，是标量值（如一个String），或者它们的返回值类型可以从后面的代码中推断出来，
+那么类型可以省略。
 
 ```kotlin
 override fun toString(): String = "Hey"
 // becomes
 override fun toString() = "Hey"
 ```
+
 ```kotlin
 private val ICON: Icon = IconLoader.getIcon("/icons/kotlin.png")
 // becomes
 private val ICON = IconLoader.getIcon("/icons/kotlin.png")
 ```
 
-When writing a library, retain the explicit type declaration when it is part of the public API.
+但在编写库时，公开的 API 应保留其显式类型声明。
 
+# 命名
 
-# Naming
+标识符只能使用 ASCII 字母和数字，以及下面少数情况中的下划线。亦即每个合法的标识符都可用正则表达式`\w+`匹配。
 
-Identifiers use only ASCII letters and digits, and, in a small number of cases noted below, underscores. Thus each valid identifier name is matched by the regular expression `\w+`.
+有特殊前缀和后缀的，如示例中所见到的`name_`、`mName`、`s_name` 和 `kName`，只在[幕后属性](#幕后属性)中使用。
 
-Special prefixes or suffixes, like those seen in the examples `name_`, `mName`, `s_name`, and `kName`, are not used except in the case of backing properties (see ["Backing properties"](#backing-properties)).
+## 包名
 
-
-## Package Names
-
-Package names are all lowercase, with consecutive words simply concatenated together (no underscores).
+包名应该全部为小写，连续单词直接拼在一起（不用下划线）。
 
 ```kotlin
 // Okay
@@ -600,19 +590,18 @@ package com.example.deepSpace
 package com.example.deep_space
 ```
 
+## 类名
 
-## Type names
+类名用 [PascalCase](https://en.wikipedia.org/wiki/PascalCase)格式书写，且通常是名词及名词短语，如 `Character`、`ImmutableList`。
+接口名也可以用名词及名词短语（如`List`），也可以用形容词及形容词短语（如`Readable`）。
 
-Class names are written in PascalCase and are typically nouns or noun phrases. For example, `Character` or `ImmutableList`. Interface names may also be nouns or noun phrases (for example, `List`), but may sometimes be adjectives or adjective phrases instead (for example `Readable`).
+测试类用要测试的类的名字作开头，并以 `Test` 结尾，如`HashTest`、`HashIntegrationTest`。
 
-Test classes are named starting with the name of the class they are testing, and ending with `Test`. For example, `HashTest` or `HashIntegrationTest`.
+## 函数名
 
+函数名使用驼峰法命名，通常使用动词及动词短语，如`sendMessage`、`stop`。
 
-## Function names
-
-Function names are written in camelCase and are typically verbs or verb phrases. For example, `sendMessage` or `stop`.
-
-Underscores are permitted to appear in test function names to separate logical components of the name.
+测试函数名称中允许用下划线分隔其逻辑元素。
 
 ```kotlin
 @Test fun pop_emptyStack() {
@@ -620,31 +609,29 @@ Underscores are permitted to appear in test function names to separate logical c
 }
 ```
 
+## 常量名
 
-## Constant names
+常量名用蛇形大小写（UPPER_SNAKE_CASE）格式：所有字母大写、单词之间用下划线隔开。但究竟什么是常量？
 
-Constant names use UPPER_SNAKE_CASE: all uppercase letters, with words separated by underscores. But what _is_ a constant, exactly?
-
-Constants are `val` properties with no custom `get` function, whose contents are deeply immutable, and whose functions have no detectable side-effects. This includes immutable types and immutable collections of immutable types as well as scalars and string if marked as `const`. If any of an instance's observable state can change, it is not a constant. Merely intending to never mutate the object is not enough.
+常量是那些没有自定义`getter`的`val`属性，其内容完全不可变，其函数没有可察觉的[副作用](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)（译者注：不会对函数外的任何东西作修改）。这包括不可变类型、不可变类型的不可变集合，以及标记为`cost`的标量和字符串。如果一个实例的任何可被观察的状态是可改变的，它就不是一个常量。仅仅在意图上不对实例作改动是不够的。
 
 ```kotlin
 const val NUMBER = 5
 val NAMES = listOf("Alice", "Bob")
 val AGES = mapOf("Alice" to 35, "Bob" to 32)
-val COMMA_JOINER = Joiner.on(',') // Joiner is immutable
+val COMMA_JOINER = Joiner.on(',') // Joiner 是不可变的
 val EMPTY_ARRAY = arrayOf<SomeMutableType>()
 ```
 
-These names are typically nouns or noun phrases.
+这些名称通常是名词或名词短语。
 
-Constant values can only be defined inside of an `object` or as a top-level declaration. Values otherwise meeting the requirement of a constant but defined inside of a `class` must use a non-constant name.
+常量只能定义在在一个对象（`object`）内或者作为一个顶级声明。否则，即使满足上述对常量的要求，但定义在类（`class`）中的必须使用非常量的名称。
 
-Constants which are scalar values must use the [`const` modifier](http://kotlinlang.org/docs/reference/properties.html#compile-time-constants).
+标量值类型（scalar values）的常量，必须用[`const`修饰符](http://kotlinlang.org/docs/reference/properties.html#compile-time-constants)。
 
+## 非常量命名
 
-## Non-constant names
-
-Non-constant names are written in camelCase. These apply to instance properties, local properties, and parameter names.
+非常量的名字可采用驼峰写法。适用于实例的属性、局部属性和参数名。
 
 ```kotlin
 val variable = "var"
@@ -656,11 +643,12 @@ val logger = Logger.getLogger(MyClass::class.java.name)
 val nonEmptyArray = arrayOf("these", "can", "change")
 ```
 
-These names are typically nouns or noun phrases.
+这些名字通常是名词或名词短语。
 
-### Backing properties
 
-When a [backing property](https://kotlinlang.org/docs/reference/properties.html#backing-properties) is needed, its name should exactly match that of the real property except prefixed with an underscore.
+### 幕后属性
+
+当需要用到[幕后属性](https://kotlinlang.org/docs/reference/properties.html#backing-properties)时，它的名称，除了有个下划线当前缀外，与其实际属性应该完全匹配。
 
 ```kotlin
 private var _table: Map<String, Int>? = null
@@ -675,37 +663,34 @@ val table: Map<String, Int>
 ```
 
 
-## Type variable names
+## 类型变量的名称
 
-Each type variable is named in one of two styles:
+类型变量（注：用于泛型）按下面两种风格之一命名：
 
- 1. A single capital letter, optionally followed by a single numeral (such as `E`, `T`, `X`, `T2`)
- 2. A name in the form used for classes, followed by the capital letter `T` (such as `RequestT`, `FooBarT`)
+ 1. 一个大写字母，可视情况跟个数字（如：`E`，`T`，`X`，`T2`）
+ 2. 用类型的名字加大写字母`T`（如：RequestT，FooBarT）
 
+## 关于驼峰写法
 
-## Camel case
+有时候，会有不止一种合理的方式将英文短语转成驼峰风格，如缩略词或者类似于 "IPv6"、"iOS"等特别的结构。为了提高可预见性，可遵循下列方案。
 
-Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" or "iOS" are present. To improve predictability, use the following scheme.
+从名字的原始形式开始：
 
-Beginning with the prose form of the name:
+ 1. 将短语转为纯 ASCII 表示，并删除所有撇号。举个例子，"Müller's algorithm" 可转成 "Muellers algorithm"。
 
- 1. Convert the phrase to plain ASCII and remove any apostrophes. For example, "Müller's algorithm" might become "Muellers algorithm".
+ 2. 将结果再分成单词，用空格和剩下的标点符号（一般是连接字符）分割。
 
- 2. Divide this result into words, splitting on spaces and any remaining punctuation (typically hyphens).
+    * _建议_: 如果一个单词已经采用了驼峰写法，则按其组成部分分开（如 "AdWords" 转换成 "ad words"）。注意，像"iOS"这样的单词_本身_并不是真正的驼峰写法，它违背了所有惯例，因此这个建议对它不适用。
 
-    * _Recommended_: if any word already has a conventional camel-case appearance in common usage, split this into its constituent parts (e.g., "AdWords" becomes "ad words"). Note that a word such as "iOS" is not really in camel case _per se_; it defies _any_ convention, so this recommendation does not apply.
+ 3. 将所有字符都小写（包括缩略词），然后只将下面单词的首字符大写：
+    * Pascal写法中单词，或者
+    * 驼峰写法中的单词（第一个除外）
 
- 3. Now lowercase everything (including acronyms), then uppercase only the first character of:
+4. 最后把所有的词组合成一个识别符。
 
-    * ...each word, to yield pascal case, or
+需要注意的是，原始词组的外表几乎完全被忽略了。
 
-    * ...each word except the first, to yield camel case
-
- 4. Finally, join all the words into a single identifier.
-
-Note that the casing of the original words is almost entirely disregarded.
-
-| **Prose form**         | **Correct**                             | **Incorrect**       |
+| **原始形式**            | **Correct**                             | **Incorrect**       |
 |------------------------|-----------------------------------------|---------------------|
 | "XML Http Request"     | `XmlHttpRequest`                        | `XMLHTTPRequest`    |
 | "new customer ID"      | `newCustomerId`                         | `newCustomerID`     |
@@ -713,62 +698,58 @@ Note that the casing of the original words is almost entirely disregarded.
 | "supports IPv6 on iOS" | `supportsIpv6OnIos`                     | `supportsIPv6OnIOS` |
 | "YouTube importer"     | `YouTubeImporter`<br>`YoutubeImporter`* |                     |
 
-(_*Acceptable, but not recommended._)
+**注意**：有些词组的连字符在英语中是可有可无的，例如，"nonempty"和"non-empty"都是可以的，所以方法名`checkNonempty`和`checkNonEmpty`同样都可以。
 
-**Note**: Some words are ambiguously hyphenated in the English language: for example "nonempty" and "non-empty" are both correct, so the method names `checkNonempty` and `checkNonEmpty` are likewise both correct.
+# 文档
 
+## 格式
 
-# Documentation
-
-
-## Formatting
-
-The basic formatting of KDoc blocks is seen in this example:
+如下是基本的 KDoc 文档:
 
 ```kotlin
 /**
- * Multiple lines of KDoc text are written here,
- * wrapped normally…
+ * KDoc 的多行文本可以书写到这里，
+ * 普通的换行…
  */
 fun method(arg: String) {
     // …
 }
 ```
 
-...or in this single-line example:
+或者像这样的单行:
 
 ```kotlin
-/** An especially short bit of KDoc. */
+/** 一个特别短的 KDoc。 */
 ```
 
-The basic form is always acceptable. The single-line form may be substituted when the entirety of the KDoc block (including comment markers) can fit on a single line. Note that this only applies when there are no block tags such as `@return`.
+基本样式在任何情况下都是可以用的。单行样式可以用来替换一行就能整个放下的 KDoc（包括注释标记），需要注意这仅适用于没有块标签（如`@return`）的 KDoc。
 
-### Paragraphs
+### 段落
 
-One blank line—that is, a line containing only the aligned leading asterisk (`*`)—appears between paragraphs, and before the group of block tags if present.
+空行，即只有对齐用的前置星号(`*`)的行，可以出现在段落间，也可以出现在块标签组（如果有的话）之前
 
-### Block tags
+### 块标签
 
-Any of the standard "block tags" that are used appear in the order `@constructor`, `@receiver`, `@param`, `@property`, `@return`, `@throws`, `@see`, and these never appear with an empty description. When a block tag doesn't fit on a single line, continuation lines are indented 8 spaces from the position of the `@`.
+所有标准的“块标签”都要按`@constructor`、`@receiver`、`@param`、`@property`、`@return`、`@throws`、`@see`的顺序排列，而且标签的描述不能留白。当块标签一行放不下时，换行后的连续行从`@`的位置缩进8个空格。
+
+## 摘要片段
+
+每个 KDoc 块都要以一个简短的摘要片段开头。这个片段非常重要：它是文档文本的唯一可以出现在某些上下文（例如类和方法索引）中的部分。
+
+一个片段是名词短语或动词短语，而非一个完整的句子。它不以“`某某是一个……`” 或者“`这个方法返回……`”开头，也不必是一个完整的祈使句，如“`Save the record.`”。虽然，片段用大写字母开头又有标点符号（指用英文书写的片段），看起来像是一个完整的句子。
 
 
-## Summary fragment
+## 用法
 
-Each KDoc block begins with a brief summary fragment. This fragment is very important: it is the only part of the text that appears in certain contexts such as class and method indexes.
+至少在每个 `public` 的类型，以及每个`public` 或 `protected` 的成员上都要有 KDoc，下面的例子除外。
 
-This is a fragment–a noun phrase or verb phrase, not a complete sentence. It does not begin with "``A `Foo` is a…``", or "`This method returns…`", nor does it have to form a complete imperative sentence like "`Save the record.`". However, the fragment is capitalized and punctuated as if it were a complete sentence.
+### 例外：自明（self-explanatory）函数
 
+KDoc 对于“简单、明了”的函数（如`getFoo`）和属性（如`foo`）不是必需的，实在没什么值得说的时候就用“Returns the foo”吧。
 
-## Usage
+举这个例子来说明其实不是很恰当，因为这样可能会省略掉某些读者正需要了解的相关信息。例如，函数名为`getCanonicalName`，或者属性名为`canonicalName`，如果某些读者可能不知道术语"canonical name"的意思的话，就不要省略它的文档（尽管术语解释起来可能只是一句`/** Returns the canonical name. */`）。
 
-At the minimum, KDoc is present for every `public` type, and every `public` or `protected` member of such a type, with a few exceptions noted below.
+### 例外：覆写（override）
 
-### Exception: self-explanatory functions
+那些覆写自父类的方法并不是都会有 KDoc。
 
-KDoc is optional for "simple, obvious" functions like `getFoo` and properties like `foo`, in cases where there really and truly is nothing else worthwhile to say but "Returns the foo".
-
-It is not appropriate to cite this exception to justify omitting relevant information that a typical reader might need to know. For example, for a function named `getCanonicalName` or property named `canonicalName`, don't omit its documentation (with the rationale that it would say only `/** Returns the canonical name. */`) if a typical reader may have no idea what the term "canonical name" means!
-
-### Exception: overrides
-
-KDoc is not always present on a method that overrides a supertype method.

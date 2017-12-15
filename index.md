@@ -11,9 +11,10 @@ site_nav_category_order: 1
   <div class="mdl-cell mdl-cell--6-col">
     <h1>Kotlin Guides</h1>
 
-    <p>Kotlin is Android's newest supported programming language. It is expressive, concise, extensible, powerful, and a joy to read and write.</p>
-    <p>These guides provide a set of rules to follow when writing Kotlin for Android.</p>
-    <p>The contents of this site are a living guide and are updated regularly. Updates are published to the <a href="changelog.html">change log</a>. If you would like to contribute, please read the <a href="contribute.html">contribution guidelines</a>.</p>
+    <p>Kotlin 是 Android 官方最新所支持的语言，它表达能力强，简洁又干练，富有可扩展性，使得读写代码变成一种乐趣。</p>
+    <p>本指南提供了一系列可供遵循的规范为了您在 Android 上更好的使用 Kotlin。</p>
+    <p>指南内容会定期更新，每次所变更的内容都会发布到<a href="changelog.html">“变更日志”</a>页面。</p>
+    <p>你想要参与进来？请阅读<a href="contribute.html">“供献指引”</a>。</p>
   </div>
 
   <div class="mdl-cell mdl-cell--6-col">

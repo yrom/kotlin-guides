@@ -6,33 +6,34 @@ site_nav_category_order: 400
 is_site_nav_category: true
 ---
 
-Contributions to this website are welcome and appreciated!
+欢迎并感谢您参与进来为本站供献内容！
 
-To contribute to this website, feel free to create pull requests for small fixes. For bigger contributions we recommend to start an issue on the [issue tracker](https://github.com/android/kotlin-guides/issues) first.
+供献内容时，如是小的改动可以直接发起 pull request；如是大型改动，我们建议先通过[issue tracker](https://github.com/android/kotlin-guides/issues) 发起一个讨论。
 
-Pull requests should be made targeting the `master` branch of the [GitHub repo](https://github.com/android/kotlin-guides). Every few weeks, the [change log](changelog.html) will be updated and all changes in that time period will be released to the `gh-pages` branch.
+Pull request 需指向 [GitHub 仓库](https://github.com/android/kotlin-guides)上的 `master` 分支。 
+每过几周，所有的改动都会统一发布到`gh-pages`分支，[“变更日志”](changelog.html)页面也会随之更新。
 
-**We are looking forward to all of your contributions!**
+**我们期待着您的参与！**
 
 
-## Development
+## 开发
 
-You can run the site locally on your computer while making changes.
+你在做改动时，可以在你自己的电脑上运行这个网站
 
-### Setup Ruby and Bundler
+### 配置 Ruby 和 Bundler
 
-Ensure that you have Ruby and [Bundler](http://bundler.io/) installed.
+首先请确认你安装了 Ruby 和 [Bundler](http://bundler.io/)。
 
     gem install bundler
 
-### One-time setup
+### 一次性配置
 
     bundle install --path vendor/bundle
 
-_Note: If you're on Mac OS and this fails installing nokogiri, run `brew unlink xz`, install, and then `brew link xz`._
+_注意: 如果你是 Mac OS 系统，安装 nokogiri 时发生错误，你可以先手动执行命令 `brew unlink xz`，再重试安装，然后再执行 `brew link xz`。_
 
-### Running the site
+### 运行网站
 
     bundle exec jekyll serve
 
-Point your browser at [http://127.0.0.1:4000/kotlin-guides/](http://127.0.0.1:4000/kotlin-guides/).
+用浏览器打开 [http://127.0.0.1:4000/kotlin-guides/](http://127.0.0.1:4000/kotlin-guides/)。
