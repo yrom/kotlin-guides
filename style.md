@@ -6,9 +6,9 @@ is_site_nav_category: true
 site_nav_category: style
 ---
 
-本文承载了 Google 对于 Android 上的 Kotlin 编程语言的编码准则的完整定义。一份 Kotlin 源文件，当且仅当它遵守本文的规则，可被描述为符合 Google Android Style。
+本文承载了 Google 对于 Android 上关于 Kotlin 编程语言的编码准则的完整定义。一份 Kotlin 源文件，当且仅当它遵守本文的规则书写时，可被称为符合了 Google Android Style。
 
-像别的编程语言格式指南一样，所涉及的不仅仅是格式上的美化问题，还包括其它类型的约定或者编码标准。然而，本文主要关注的还是我们普遍遵循的硬性规定，并尽量避免给出不明确的强制性建议（无论是人或者工具）。
+像别的编程语言风格指南一样，所涉及的不仅仅是美化代码格式的问题，还包括其它类型的约定或者编码标准。然而，本文主要关注的还是我们应普遍遵循的硬性规定，并尽量避免给出不明确的强制性建议（无论是人或者工具）。
 
 _<a href="changelog.html">上次更新于: {{ site.changes.last.date | date: "%Y-%m-%d" }}</a>_
 
@@ -99,7 +99,7 @@ fun <T, O> List<T>.map(func: (T) -> O): List<O> = // …
 // ...
 ```
 
-### 文件等级注解
+### 文件级注解
 
 [使用目标点](https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets)为 'file' 的注解需要放到头部注释和包声明之间。
 
@@ -436,7 +436,7 @@ val defaultExtension: String get() = "kt"
         ```kotlin
         // Okay
         for (i in 1..4) print(i)
-
+        ```
     
 5. 冒号（`:`）之前，仅限于类声明中指定基类或接口的冒号，或者在[泛型约束](https://kotlinlang.org/docs/reference/generics.html#generic-constraints)的where从句中的冒号。
 
@@ -680,10 +680,12 @@ val table: Map<String, Int>
 
  2. 将结果再分成单词，用空格和剩下的标点符号（一般是连接字符）分割。
 
-    * _建议_: 如果一个单词已经采用了驼峰写法，则按其组成部分分开（如 "AdWords" 转换成 "ad words"）。注意，像"iOS"这样的单词_本身_并不是真正的驼峰写法，它违背了所有惯例，因此这个建议对它不适用。
+    * _建议_: 如果一个单词已经采用了驼峰写法，则按其组成部分分开（如 "AdWords" 转换成 "ad words"）。注意，像"iOS"这样的单词 _本身_ 并不是真正的驼峰写法，它违背了所有惯例，因此这个建议对它不适用。
 
  3. 将所有字符都小写（包括缩略词），然后只将下面单词的首字符大写：
+ 
     * Pascal写法中单词，或者
+
     * 驼峰写法中的单词（第一个除外）
 
 4. 最后把所有的词组合成一个识别符。
