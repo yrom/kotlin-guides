@@ -611,9 +611,11 @@ package com.example.deep_space
 
 ## 常量名
 
-常量名用蛇形大小写（UPPER_SNAKE_CASE）格式：所有字母大写、单词之间用下划线隔开。但究竟什么是常量？
+常量名用全大写的蛇形写法（UPPER_SNAKE_CASE）：所有字母大写、单词之间用下划线隔开。
 
-常量是那些没有自定义`getter`的`val`属性，其内容完全不可变，其函数没有可察觉的[副作用](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)（译者注：不会对函数外的任何东西作修改）。这包括不可变类型、不可变类型的不可变集合，以及标记为`cost`的标量和字符串。如果一个实例的任何可被观察的状态是可改变的，它就不是一个常量。仅仅在意图上不对实例作改动是不够的。
+但究竟什么是常量？
+
+常量是那些没有自定义`getter`的`val`属性，其内容完全不可变，其函数没有可察觉的[副作用](https://en.wikipedia.org/wiki/Side_effect_%28computer_science%29)（译者注：不会对函数外的任何东西作修改）。这包括不可变类型、不可变类型的不可变集合，以及标记为`const`的标量和字符串。如果一个实例的任何可被观察的状态是可改变的，它就不是一个常量。仅仅在意图上不对实例作改动是不够的。
 
 ```kotlin
 const val NUMBER = 5
@@ -625,7 +627,7 @@ val EMPTY_ARRAY = arrayOf<SomeMutableType>()
 
 这些名称通常是名词或名词短语。
 
-常量只能定义在在一个对象（`object`）内或者作为一个顶级声明。否则，即使满足上述对常量的要求，但定义在类（`class`）中的必须使用非常量的名称。
+常量只能定义在在一个对象（`object`）内或者作为一个顶级声明。否则，即使满足上述对常量的要求，定义在类（`class`）中的必须使用非常量的名称。
 
 标量值类型（scalar values）的常量，必须用[`const`修饰符](http://kotlinlang.org/docs/reference/properties.html#compile-time-constants)。
 
